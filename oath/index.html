@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Oath — AI Accountability · Maxwell Burson</title>
+  <meta name="description" content="Oath is an iOS habit tracker you can't fool: commit to a habit, then prove it with a live photo that AI checks. Designed and built by Maxwell Burson.">
+  <script>
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem('theme'); } catch (e) {}
+      if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23ff4d1c'/%3E%3C/svg%3E">
+</head>
+<body class="is-loading case-page">
+
+  <div class="cursor" aria-hidden="true"><div class="cursor__ring"><i></i></div><div class="cursor__dot"><i></i></div></div>
+  <div class="cursor-label" aria-hidden="true"><div class="cursor-label__inner"><span class="cursor-label__text"></span></div></div>
+  <div class="progress" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="toast" role="status" aria-live="polite"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="wrap header__inner">
+      <a href="../" class="logo" data-magnetic="0.25" aria-label="Home">
+        <span class="logo__mark" data-bind="initials"></span>
+        <span class="logo__name"><span class="roll"><span data-bind-roll="name"></span></span></span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="../#work" aria-current="true"><span class="roll"><span data-text="Work">Work</span></span></a>
+        <a href="../#about"><span class="roll"><span data-text="About">About</span></span></a>
+        <a href="../#experience"><span class="roll"><span data-text="Experience">Experience</span></span></a>
+        <a href="#contact"><span class="roll"><span data-text="Contact">Contact</span></span></a>
+      </nav>
+      <div class="header__right">
+        <span class="clock mono"><span class="clock__place" data-bind="locationShort"></span> <span data-clock>--:--:--</span></span>
+        <button class="theme-toggle" type="button" aria-label="Toggle colour theme" data-magnetic="0.4">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg>
+        </button>
+        <button class="menu-btn mono" type="button" aria-expanded="false" aria-controls="menu"><span data-menu-label>Menu</span><span class="menu-btn__icon" aria-hidden="true"></span></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="menu" id="menu" aria-hidden="true" inert>
+    <nav class="menu__nav" aria-label="Mobile">
+      <a href="../#work" style="--i:0"><span>Work</span></a>
+      <a href="../#about" style="--i:1"><span>About</span></a>
+      <a href="../#experience" style="--i:2"><span>Experience</span></a>
+      <a href="#contact" style="--i:3"><span>Contact</span></a>
+    </nav>
+    <div class="menu__foot mono"><span data-bind="locationShort"></span><span data-clock></span></div>
+  </div>
+
+  <main>
+    <!-- Hero -->
+    <section class="case-hero">
+      <div class="wrap">
+        <div class="case-hero__top mono">
+          <a href="../#work" class="back fade-up" style="--d:.1s"><span aria-hidden="true">←</span> <span class="roll"><span data-text="All work">All work</span></span></a>
+          <span class="fade-up hide-sm" style="--d:.2s">(01) Case study</span>
+          <span class="fade-up" style="--d:.3s"><span class="status"><span class="status__dot"></span>Live on the App Store</span></span>
+        </div>
+
+        <div class="case-hero__title">
+          <svg class="case-hero__mark fade-up" style="--d:.15s" viewBox="0 0 1024 1024" aria-hidden="true">
+            <g fill="none" stroke="currentColor" stroke-linecap="round">
+              <circle cx="512" cy="512" r="300" stroke-width="56"/>
+              <g stroke-width="52"><path d="M798 512 512 346.9"/><path d="M655 264.3 369 429.4"/><path d="M369 264.3v330.3"/><path d="M226 512l286 165.1"/><path d="M369 759.7l286-165.1"/><path d="M655 759.7V429.4"/></g>
+            </g>
+          </svg>
+          <h1 class="case-title">
+            <span class="line"><span class="line__inner" style="--i:1">Oath</span></span>
+            <span class="line"><span class="line__inner case-title__sub" style="--i:2"><em>AI accountability</em></span></span>
+          </h1>
+        </div>
+
+        <div class="case-hero__bottom">
+          <p class="case-lede fade-up" style="--d:.6s">The habit tracker you can't fool. Make an oath, then <em>prove it</em> with a live photo that AI checks in seconds. Your streak only grows when it's real.</p>
+          <dl class="case-meta fade-up" style="--d:.7s">
+            <div><dt class="mono">Role</dt><dd>Solo: design, iOS &amp; backend</dd></div>
+            <div><dt class="mono">Platform</dt><dd>iPhone · Swift / SwiftUI</dd></div>
+            <div><dt class="mono">Year</dt><dd>2026</dd></div>
+          </dl>
+          <div class="case-links fade-up" style="--d:.8s">
+            <a class="pill pill--solid" href="https://apps.apple.com/us/app/oath-ai-accountability/id6761296911" target="_blank" rel="noopener" data-magnetic="0.25" data-cursor-label="Open">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.2 1.8-3.26 1.88-3.31-1.03-1.5-2.62-1.7-3.18-1.73-1.35-.14-2.64.8-3.33.8-.69 0-1.74-.78-2.87-.76-1.47.02-2.83.86-3.59 2.18-1.53 2.66-.39 6.6 1.1 8.75.73 1.05 1.6 2.24 2.73 2.2 1.1-.05 1.51-.71 2.84-.71 1.32 0 1.7.71 2.86.69 1.18-.02 1.93-1.07 2.65-2.13.84-1.22 1.18-2.4 1.2-2.46-.03-.01-2.3-.88-2.32-3.5ZM14.2 6.13c.6-.73 1.01-1.75.9-2.76-.87.04-1.92.58-2.54 1.31-.56.65-1.05 1.68-.92 2.67.97.08 1.96-.49 2.56-1.22Z"/></svg>
+              App Store
+            </a>
+            <a class="pill" href="https://www.oath-app.com" target="_blank" rel="noopener" data-magnetic="0.25" data-cursor-label="Visit">oath-app.com ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hero stage: three phones -->
+    <section class="wrap">
+      <div class="stage" data-reveal>
+        <div class="stage__glow" aria-hidden="true"></div>
+        <div class="stage__phones">
+          <div class="phone phone--side" data-parallax="0.08"><img src="media/habits-dark.webp" alt="Habits screen with weekly heatmaps for Gym, Reading and Meditation" loading="lazy"></div>
+          <div class="phone phone--main" data-parallax="-0.04"><img src="media/oaths-dark.webp" alt="Oaths screen: today's oaths grouped into Anytime, Morning, Afternoon and Evening" loading="eager"></div>
+          <div class="phone phone--side" data-parallax="0.12">
+            <video src="media/proof.mp4" poster="media/proof-poster.webp" autoplay muted loop playsinline aria-label="Proving an oath with the camera and AI check"></video>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="section case-section">
+      <div class="wrap case-grid">
+        <p class="mono case-label" data-reveal>(A) Overview</p>
+        <div>
+          <p class="statement" data-words>Most habit trackers trust a checkbox, and a checkbox is easy to lie to. *Oath* asks for proof: snap a live photo, and AI decides whether you really kept your *word*.</p>
+          <div class="case-cols">
+            <div data-reveal>
+              <h3 class="mono">The problem</h3>
+              <p>Ticking a box costs nothing, so it means nothing. Streaks drift into wishful thinking and the habit quietly dies.</p>
+            </div>
+            <div data-reveal style="--d:.08s">
+              <h3 class="mono">The idea</h3>
+              <p>Put a tiny, honest bit of friction back in. Show the trainers, the page or the plate, and let AI check that the photo matches the promise.</p>
+            </div>
+            <div data-reveal style="--d:.16s">
+              <h3 class="mono">The outcome</h3>
+              <p>A native iPhone app, designed and built end to end by me, now live on the App Store with real subscribers.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="section case-section">
+      <div class="wrap">
+        <h2 class="section__title" data-split><span class="line"><span class="line__inner">Say it. <em>Prove it.</em></span></span></h2>
+        <div class="section__head mono" data-reveal><span>(B) How it works</span><span>3 steps</span></div>
+
+        <div class="steps">
+          <article class="step">
+            <div class="step__text" data-reveal>
+              <span class="step__num mono">01</span>
+              <h3>Make an oath.</h3>
+              <p>Name it, give it a time of day (morning, afternoon, evening or anytime) and choose how it's checked: a live photo, or a simple tick. Repeating habits and one-off oaths sit side by side, so today is always one clear list.</p>
+            </div>
+            <div class="step__media" data-reveal style="--d:.1s">
+              <div class="phone"><img src="media/oaths-dark.webp" alt="The Oaths list for Thursday" loading="lazy"></div>
+            </div>
+          </article>
+
+          <article class="step step--flip">
+            <div class="step__text" data-reveal>
+              <span class="step__num mono">02</span>
+              <h3>Prove it.</h3>
+              <p>When it's done, the camera opens. Live camera only: there's no gallery to pick from. The photo is compressed on-device and sent to a vision model that checks it's relevant to the oath. A picture of a picture doesn't count.</p>
+            </div>
+            <div class="step__media" data-reveal style="--d:.1s">
+              <div class="phone"><img src="media/proof-reading.webp" alt="The AI reading a photo of running shoes as proof" loading="lazy"></div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step__text" data-reveal>
+              <span class="step__num mono">03</span>
+              <h3>Watch it grow.</h3>
+              <p>Every habit gets its own heatmap, filling in green day by day. Any one thing done secures the day for your streak, and milestones land at 3, 7, 14, 30, 60, 100 and 365 days.</p>
+            </div>
+            <div class="step__media" data-reveal style="--d:.1s">
+              <div class="phone"><img src="media/habits.webp" alt="Habits screen with green heatmaps" loading="lazy"></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature bento -->
+    <section class="section case-section">
+      <div class="wrap">
+        <h2 class="section__title" data-split><span class="line"><span class="line__inner">Built for the <em>long run</em></span></span></h2>
+        <div class="section__head mono" data-reveal><span>(C) Features</span><span>iOS 26</span></div>
+
+        <div class="bento">
+          <figure class="tile tile--wide" data-reveal>
+            <div class="tile__media tile__media--widgets">
+              <img src="media/widgets-home.webp" alt="Home Screen widgets showing progress, streak and a Prove It shortcut" loading="lazy">
+              <img src="media/widgets-lock.webp" alt="Lock Screen widgets showing the streak and what's left today" loading="lazy">
+            </div>
+            <figcaption><h3>Always in sight</h3><p>13 WidgetKit designs across the Home and Lock Screen. Tick oaths off without opening the app, and photo oaths jump straight into the camera.</p></figcaption>
+          </figure>
+
+          <figure class="tile" data-reveal style="--d:.08s">
+            <div class="tile__media"><img src="media/streak-sheet.webp" alt="Streak sheet: 47 days, next milestone at 60" loading="lazy"></div>
+            <figcaption><h3>Honestly counted</h3><p>Longest, current, kept and broken, plus how far to the next milestone.</p></figcaption>
+          </figure>
+
+          <figure class="tile" data-reveal>
+            <div class="compare" style="--pos:50%">
+              <img src="media/habits.webp" alt="Habits in light mode" loading="lazy">
+              <img class="compare__top" src="media/habits-dark.webp" alt="Habits in dark mode" loading="lazy">
+              <span class="compare__handle" aria-hidden="true"></span>
+              <input type="range" min="0" max="100" value="50" aria-label="Compare light and dark mode" data-cursor-label="Drag">
+            </div>
+            <figcaption><h3>Light, dark, or both</h3><p>A black-and-white, iOS-native look in both modes. Drag to compare.</p></figcaption>
+          </figure>
+
+          <figure class="tile" data-reveal style="--d:.08s">
+            <div class="tile__media"><img src="media/detail-sheet.webp" alt="Habit stats sheet" loading="lazy"></div>
+            <figcaption><h3>Every habit tells its story</h3><p>Times kept, best run and this week, one tap from the heatmap.</p></figcaption>
+          </figure>
+
+          <div class="tile tile--list" data-reveal style="--d:.16s">
+            <ul class="mini">
+              <li><h3>Weekly aims</h3><p>"Gym, five days a week." Rest days are part of the plan and never break a streak.</p></li>
+              <li><h3>Build it, or quit it</h3><p>Start a habit or break one: count clean days, or log each slip honestly.</p></li>
+              <li><h3>Nudges, never nagging</h3><p>A reminder when an oath is due, and one more only if today's still empty.</p></li>
+              <li><h3>Your proof stays yours</h3><p>Photos are checked, then discarded. Only the verdict is kept.</p></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Engineering -->
+    <section class="section case-section">
+      <div class="wrap">
+        <h2 class="section__title" data-split><span class="line"><span class="line__inner">Under the <em>hood</em></span></span></h2>
+        <div class="section__head mono" data-reveal><span>(D) Engineering</span><span>v2.1</span></div>
+
+        <div class="stats case-stats">
+          <div class="stat" data-reveal><span class="stat__value" data-count="111">0</span><span class="stat__label mono">Swift files</span></div>
+          <div class="stat" data-reveal style="--d:.08s"><span class="stat__value" data-count="21" data-suffix="k">0k</span><span class="stat__label mono">Lines of Swift</span></div>
+          <div class="stat" data-reveal style="--d:.16s"><span class="stat__value" data-count="264">0</span><span class="stat__label mono">Automated tests</span></div>
+        </div>
+
+        <ul class="stack">
+          <li class="stack__row" data-reveal>
+            <span class="stack__name">Swift &amp; SwiftUI</span>
+            <p>Native iOS 26 app built on <code>@Observable</code> stores. It began as a React Native / Expo prototype; I rebuilt it natively for widgets, haptics and feel, porting the streak and date maths verbatim so no subtle timezone bugs crept in.</p>
+          </li>
+          <li class="stack__row" data-reveal>
+            <span class="stack__name">AI proof judge</span>
+            <p>A Deno edge function sends the photo to a GPT-4.1 mini vision model. It's lenient by design: it checks <em>relevance</em>, not completion, so a treadmill proves a run. It rejects pictures of screens or prints, because proof has to be the real world.</p>
+          </li>
+          <li class="stack__row" data-reveal>
+            <span class="stack__name">Supabase</span>
+            <p>Postgres with row-level security, Sign in with Apple, and offline-aware sync that queues edits and replays them on reconnect. Rate limits are enforced server-side in a single RPC round-trip.</p>
+          </li>
+          <li class="stack__row" data-reveal>
+            <span class="stack__name">RevenueCat</span>
+            <p>Subscriptions with a free trial. Entitlement is written server-side by a signed webhook, so a tampered client can't fake access.</p>
+          </li>
+          <li class="stack__row" data-reveal>
+            <span class="stack__name">WidgetKit</span>
+            <p>The app writes a snapshot into a shared App Group; interactive widgets tick items optimistically and the app replays them on launch. A seeded soak test checks the widget and app always agree.</p>
+          </li>
+          <li class="stack__row" data-reveal>
+            <span class="stack__name">Privacy first</span>
+            <p>Camera is the only permission. Photos are discarded after checking, analytics are privacy-first (TelemetryDeck), and deleting your account erases everything.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Next -->
+    <section class="section case-section" id="contact">
+      <div class="wrap">
+        <a href="../#work" class="next" data-cursor-label="Back">
+          <span class="mono next__label">Back to</span>
+          <span class="next__title">All <em>work</em></span>
+        </a>
+
+        <div class="case-contact">
+          <p class="mono contact__label">(04) Contact</p>
+          <div class="socials" id="socials"></div>
+        </div>
+
+        <footer class="footer mono">
+          <span>&copy; <span data-year></span> <span data-bind="name"></span></span>
+          <span class="hide-sm">Made in <span data-bind="locationShort"></span></span>
+          <a href="#" class="to-top"><span class="roll"><span data-text="Back to top ↑">Back to top ↑</span></span></a>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <script src="../data.js"></script>
+  <script src="../main.js"></script>
+</body>
+</html>

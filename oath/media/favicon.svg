@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <style>
+    .mark { stroke: #0A0A0A; }
+    @media (prefers-color-scheme: dark) { .mark { stroke: #FFFFFF; } }
+  </style>
+  <g class="mark" fill="none" stroke-linecap="round">
+    <circle cx="512" cy="512" r="300" stroke-width="56"/>
+    <g stroke-width="52">
+      <path d="M798.0 512.0L512.0 346.9"/>
+      <path d="M655.0 264.3L369.0 429.4"/>
+      <path d="M369.0 264.3L369.0 594.6"/>
+      <path d="M226.0 512.0L512.0 677.1"/>
+      <path d="M369.0 759.7L655.0 594.6"/>
+      <path d="M655.0 759.7L655.0 429.4"/>
+    </g>
+  </g>
+</svg>

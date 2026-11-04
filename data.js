@@ -40,44 +40,14 @@ window.PORTFOLIO = {
 
   projects: [
     {
-      title: "Lingocraft",
-      short: "Lingocraft",
-      description: "A Minecraft mod that teaches Dutch and Spanish through play, with voiced sentences for every item, block and action.",
-      tags: ["Java", "Fabric", "TTS", "Game design"],
+      title: "Oath — AI Accountability",
+      description: "An iOS habit tracker you can't fool. Commit to a habit, then prove it with a live photo that AI checks. Live on the App Store.",
+      tags: ["Swift", "SwiftUI", "Supabase", "AI vision"],
       year: "2026",
-      link: "",
-      colors: ["#5ad17a", "#2b7bff", "#0f1a12"],
-      image: "",
-    },
-    {
-      title: "Project Two",
-      short: "Two",
-      description: "One line about what it is, who it's for and the outcome. Keep it short.",
-      tags: ["Web", "Design"],
-      year: "2025",
-      link: "",
-      colors: ["#ff7a45", "#ff3d7f", "#1a0f0c"],
-      image: "",
-    },
-    {
-      title: "Project Three",
-      short: "Three",
-      description: "Another project. Swap in real titles, links and screenshots when you're ready.",
-      tags: ["App", "Prototype"],
-      year: "2025",
-      link: "",
-      colors: ["#8b7bff", "#3ad6ff", "#0e0c1a"],
-      image: "",
-    },
-    {
-      title: "Project Four",
-      short: "Four",
-      description: "A side project, an experiment, a hackathon entry: anything you're proud of.",
-      tags: ["Experiment"],
-      year: "2024",
-      link: "",
-      colors: ["#ffd23d", "#ff8a3d", "#1a160c"],
-      image: "",
+      link: "oath/", // the case study page
+      cta: "View",
+      colors: ["#34c759", "#0f5a33", "#060a07"],
+      phone: "oath/media/oaths-dark.webp", // screenshot shown inside a phone on the cover
     },
   ],
 

@@ -28,6 +28,9 @@
   function art(p, label) {
     const c = p.colors || [];
     const style = `--c1:${esc(c[0] || '#ff6b3d')};--c2:${esc(c[1] || '#6b5bff')};--c3:${esc(c[2] || '#151515')}`;
+    if (p.phone) {
+      return `<div class="art art--phone" style="${style}"><span class="art__phone"><img src="${esc(p.phone)}" alt="" loading="lazy" decoding="async"></span></div>`;
+    }
     const inner = p.image
       ? `<img src="${esc(p.image)}" alt="" loading="lazy" decoding="async">`
       : `<span class="art__label">${esc(label != null ? label : (p.short || p.title))}</span>`;
@@ -46,12 +49,27 @@
     }).join('');
   }
 
-  function render() {
-    document.title = `${D.name || 'Portfolio'} — ${D.role || 'Portfolio'}`;
-
+  // Shared by every page: data bindings, year, footer links
+  function renderCommon() {
     $$('[data-bind]').forEach((el) => { const v = get(el.dataset.bind); if (v != null) el.textContent = v; });
     $$('[data-bind-roll]').forEach((el) => { const v = get(el.dataset.bindRoll) || ''; el.textContent = v; el.dataset.text = v; });
     $$('[data-year]').forEach((el) => { el.textContent = new Date().getFullYear(); });
+    $$('[data-words]').forEach((el) => { el.innerHTML = splitWords(el.textContent.trim()); });
+
+    const socials = $('#socials');
+    if (socials) {
+      const links = (D.socials || []).filter((s) => s.url).map((s) =>
+        `<a class="social" href="${esc(s.url)}" target="_blank" rel="noopener">${roll(s.label)}${ICON_ARROW_SM}</a>`);
+      if (D.email) links.push(`<a class="social" href="mailto:${esc(D.email)}" data-copy-email>${roll('Email')}${ICON_ARROW_SM}</a>`);
+      socials.innerHTML = links.join('');
+    }
+  }
+
+  // Home page only
+  function render() {
+    renderCommon();
+    if (!$('#hero-name')) return;
+    document.title = `${D.name || 'Portfolio'} — ${D.role || 'Portfolio'}`;
 
     // Hero: name split into letters that rise in one after another
     const h = D.hero || {};
@@ -73,7 +91,7 @@
 
     // Work
     const projects = D.projects || [];
-    $('#work-count').textContent = `${pad(projects.length)} entries`;
+    $('#work-count').textContent = `${pad(projects.length)} ${projects.length === 1 ? 'project' : 'projects'}`;
     $('#work-list').innerHTML = projects.map((p, i) => {
       const href = p.link || '#work';
       const ext = isExternal(p.link) ? ' target="_blank" rel="noopener"' : '';
@@ -130,12 +148,6 @@
         </div></div>
       </li>`).join('');
     if (D.resume) $('#resume-link').innerHTML = `<a href="${esc(D.resume)}" target="_blank" rel="noopener">${roll('Résumé ↗')}</a>`;
-
-    // Contact: just a row of links
-    const links = (D.socials || []).filter((s) => s.url).map((s) =>
-      `<a class="social" href="${esc(s.url)}" target="_blank" rel="noopener">${roll(s.label)}${ICON_ARROW_SM}</a>`);
-    if (D.email) links.push(`<a class="social" href="mailto:${esc(D.email)}" data-copy-email>${roll('Email')}${ICON_ARROW_SM}</a>`);
-    $('#socials').innerHTML = links.join('');
   }
 
   /* ───────────── Theme ───────────── */
@@ -148,7 +160,9 @@
       const r = btn.getBoundingClientRect();
       const x = r.left + r.width / 2, y = r.top + r.height / 2;
       const rad = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+      root.classList.add('theme-vt'); // only the theme switch uses the circular wipe
       const t = document.startViewTransition(() => set(next));
+      t.finished.finally(() => root.classList.remove('theme-vt'));
       t.ready.then(() => {
         root.animate(
           { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${rad}px at ${x}px ${y}px)`] },
@@ -164,6 +178,7 @@
       const el = $('.preloader');
       let seen = false;
       try { seen = sessionStorage.getItem('loaded') === '1'; sessionStorage.setItem('loaded', '1'); } catch (e) {}
+      if (!el) { resolve(); return; }
       if (reduce || seen) { el.remove(); resolve(); return; }
       const count = $('.preloader__count'), bar = $('.preloader__bar');
       const fonts = document.fonts ? document.fonts.ready : Promise.resolve();
@@ -191,8 +206,9 @@
 
     const cur = $('.cursor'), dot = $('.cursor__dot'), ring = $('.cursor__ring');
     const lab = $('.cursor-label'), labText = $('.cursor-label__text');
-    const preview = $('.preview'), track = $('.preview__track');
-    const list = $('#work-list');
+    // Pages without the floating project preview get detached stand-ins
+    const preview = $('.preview') || document.createElement('div');
+    const track = $('.preview__track') || document.createElement('div');
 
     const ringPos = { x: pointer.x, y: pointer.y };
     const labPos = { x: pointer.x, y: pointer.y };
@@ -281,7 +297,8 @@
   /* ───────────── Scroll-driven bits ───────────── */
   function initScroll() {
     const header = $('.header'), progress = $('.progress');
-    const st = $('#statement'), words = $$('.w', st);
+    const st = $('.statement'), words = st ? $$('.w', st) : [];
+    const para = reduce ? [] : $$('[data-parallax]');
     let lastY = scrollY, ticking = false, lit = -1;
 
     const update = () => {
@@ -302,6 +319,13 @@
         const n = Math.round(p * words.length);
         if (n !== lit) { lit = n; words.forEach((w, i) => w.classList.toggle('is-lit', i < n)); }
       }
+
+      // Gentle parallax: offset by distance from the viewport centre
+      para.forEach((el) => {
+        const r = el.parentElement.getBoundingClientRect();
+        const off = (r.top + r.height / 2 - innerHeight / 2) * (parseFloat(el.dataset.parallax) || 0.1);
+        el.style.transform = `translate3d(0,${off.toFixed(1)}px,0)`;
+      });
     };
     addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
     addEventListener('resize', update);
@@ -405,8 +429,19 @@
     });
   }
 
+  /* ───────────── Light/dark compare slider (case studies) ───────────── */
+  function initCompare() {
+    $$('.compare').forEach((c) => {
+      const input = $('input', c);
+      const set = () => c.style.setProperty('--pos', `${input.value}%`);
+      input.addEventListener('input', set);
+      set();
+    });
+  }
+
   /* ───────────── Boot ───────────── */
   render();
+  initCompare();
   initTheme();
   initPointer();
   initMagnetic();
